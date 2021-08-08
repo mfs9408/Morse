@@ -4,25 +4,26 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import { morseSound } from "./components/soundHelper";
-import { translator } from "./components/helper";
+import { getSoundsPlayed } from "./components/helpers/getSoundsPlayed";
+import { getLettersNumber } from "./components/helpers/getLettersNumber";
+import { getSign } from "./components/helpers/getSign";
 
 const App = () => {
   const [text, setText] = useState<string>("");
-  const [symbolsArray, setSymbolsArray] = useState<string[]>([]);
-  const [morseLettersArray, setMorseLettersArray] = useState<string[]>([]);
+  const [symbolsArray, setSymbolsArray] = useState<number[]>([]);
+  const [stringsArray, setStringsArray] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    setSymbolsArray(translator(text));
+    setSymbolsArray(getLettersNumber(text));
   }, [text]);
 
   useEffect(() => {
-    setMorseLettersArray(symbolsArray.join("").split(""));
+    setStringsArray(symbolsArray.join("").split(""));
   }, [symbolsArray]);
 
   const onSound = () => {
-    morseSound(morseLettersArray, setIsDisabled);
+    getSoundsPlayed(stringsArray, setIsDisabled);
   };
 
   return (
@@ -36,6 +37,7 @@ const App = () => {
             placeholder="text here"
             onChange={(event) => setText(event.target.value)}
             fullWidth
+            disabled={isDisabled}
           />
         </Grid>
         <Button
@@ -44,10 +46,14 @@ const App = () => {
           onClick={onSound}
           disabled={isDisabled}
         >
-          Play/pause
+          Play
         </Button>
       </Grid>
-      <Typography variant="h3">{symbolsArray.join("")}</Typography>
+      <Typography variant="h3">
+        {stringsArray.map((int: string, index) =>
+          getSign(parseInt(int, 10), index)
+        )}
+      </Typography>
     </Box>
   );
 };

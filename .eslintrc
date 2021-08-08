@@ -37,6 +37,7 @@
     "@typescript-eslint/quotes": "off",
     "import/order": "off",
     "no-redeclare": "off",
-    "@typescript-eslint/no-redeclare": ["error"]
+    "@typescript-eslint/no-redeclare": ["error"],
+    "consistent-return": "off"
   }
 }

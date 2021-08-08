@@ -1,19 +1,23 @@
 // @ts-ignore
-import longMorse from "./longMorse.mp3";
+import longMorse from "../sounds/longMorse.mp3";
 // @ts-ignore
-import shortMorse from "./shortMorse.mp3";
+import shortMorse from "../sounds/shortMorse.mp3";
 import { Dispatch, SetStateAction } from "react";
 
-export const morseSound = (
+export const getSoundsPlayed = (
   morseLettersArray: string[],
   setIsDisabled: Dispatch<SetStateAction<boolean>>
 ) => {
   const short = new Audio(shortMorse);
   const long = new Audio(longMorse);
 
-  function morseArray(array: string[], num: number) {
+  const morseNumbersArray = morseLettersArray.map((int: string) =>
+    parseInt(int, 10)
+  );
+
+  function morseArray(array: number[], num: number) {
     setIsDisabled(true);
-    const next = function () {
+    const next = () => {
       morseArray(array, num + 1);
     };
 
@@ -22,10 +26,10 @@ export const morseSound = (
       return;
     }
 
-    if (array[num] === "·") {
+    if (array[num] === 1) {
       short.play();
       short.onended = next;
-    } else if (array[num] === "-") {
+    } else if (array[num] === 2) {
       long.play();
       long.onended = next;
     } else {
@@ -33,5 +37,5 @@ export const morseSound = (
     }
   }
 
-  return morseArray(morseLettersArray, 0);
+  return morseArray(morseNumbersArray, 0);
 };
